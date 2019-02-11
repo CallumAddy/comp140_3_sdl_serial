@@ -10,7 +10,7 @@ using std::cout;
 */
 Game::Game()
 {
-	
+
 }
 
 /*
@@ -22,6 +22,7 @@ Game::~Game()
 
 bool Game::initSerialConnection()
 {
+	serial = new SerialInterface();
 	return true;
 }
 /*
@@ -81,14 +82,14 @@ void Game::render()
 {
 	// set background color
 	SDL_SetRenderDrawColor(mainRenderer, 0, 0, 0, 255);
-	
+
 	// clear previous frame
 	SDL_RenderClear(mainRenderer);
 
 	// draw to the screen here!
 	SDL_SetRenderDrawColor(mainRenderer, 255, 255, 255, 255);
-	SDL_RenderFillRect(mainRenderer,&playerPosition);
-	
+	SDL_RenderFillRect(mainRenderer, &playerPosition);
+
 	// render new frame
 	SDL_RenderPresent(mainRenderer);
 }
@@ -99,7 +100,8 @@ void Game::render()
 */
 void Game::update()
 {
-	
+	serial->getPositions();
+	playerPosition.y = serial->getPot1();
 }
 
 /*
@@ -139,11 +141,9 @@ void Game::handleEvents()
 *
 */
 void Game::clean()
-{	
+{
 	cout << "Cleaning SDL \n";
 	SDL_DestroyWindow(mainWindow);
 	SDL_DestroyRenderer(mainRenderer);
 	SDL_Quit();
 }
-
-
